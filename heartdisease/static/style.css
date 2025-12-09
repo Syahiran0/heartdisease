@@ -1,73 +1,118 @@
+/* Body and page */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f7f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    background: linear-gradient(to right, #f5f0ff, #ffffff);
+    font-family: 'Roboto', sans-serif;
     margin: 0;
+    padding: 0;
 }
 
+/* Container card */
 .container {
-    background-color: white;
-    padding: 30px 40px;
+    width: 520px;
+    background: #ffffff;
+    padding: 35px 40px;
+    border-radius: 15px;
+    margin: 50px auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s;
+}
+
+.container:hover {
+    transform: scale(1.01);
+}
+
+/* Title styling */
+.container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #ffffff;
+    background-color: #6a1b9a; /* Dark purple */
+    font-family: 'Georgia', serif;
+    font-size: 30px;
+    padding: 15px 0;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    width: 400px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-h1 {
-    text-align: center;
-    color: #e74c3c;
-}
-
-p {
-    text-align: center;
-    color: #555;
-    margin-bottom: 20px;
-}
-
-.form-group {
+/* Section headers */
+h3 {
+    margin-top: 25px;
     margin-bottom: 15px;
+    color: #7b5fc0;
+    font-size: 20px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 5px;
 }
 
+/* Label styling */
 label {
     display: block;
+    margin-top: 10px;
     margin-bottom: 5px;
-    font-weight: bold;
-    color: #333;
-}
-
-input[type="number"], select {
-    width: 100%;
-    padding: 8px 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+    font-weight: 500;
+    color: #333; /* Dark text */
     font-size: 14px;
 }
 
+/* Inputs and selects */
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+input:focus, select:focus {
+    border-color: #6a1b9a;
+    box-shadow: 0 0 5px rgba(106,27,154,0.3);
+    outline: none;
+}
+
+/* Section spacing */
+.section {
+    margin-bottom: 30px;
+}
+
+/* Submit button */
 button {
     width: 100%;
-    padding: 10px;
-    background-color: #e74c3c;
+    padding: 12px;
+    background: #6a1b9a;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-    margin-top: 10px;
+    transition: all 0.3s;
 }
 
 button:hover {
-    background-color: #c0392b;
+    background: #5e42a6;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-.result {
-    background-color: #fce4e4;
-    border: 1px solid #e74c3c;
-    padding: 15px;
-    margin-top: 20px;
-    border-radius: 8px;
+/* Result page styling */
+p {
+    font-size: 18px;
     text-align: center;
-    color: #e74c3c;
+    margin-top: 30px;
+}
+
+a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #6a1b9a;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
 }

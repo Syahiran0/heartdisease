@@ -2,91 +2,123 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Heart Attack Risk Pre-Screening</title>
+    <title>Heart Disease Expert System</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Heart Attack Risk Pre-Screening</h1>
-        <p>Fill in your details to check your heart risk.</p>
-        <form action="/diagnose" method="post">
-            <div class="form-group">
-                <label>Heart Rate (bpm):</label>
-                <input type="number" name="heart_rate" required>
-            </div>
 
-            <div class="form-group">
-                <label>Chest Pain:</label>
-                <select name="chest_pain" required>
-                    <option value="none">None</option>
-                    <option value="mild">Mild</option>
-                    <option value="severe">Severe</option>
-                    <option value="painful">Painful</option>
-                </select>
-            </div>
+<div class="container">
+    <h2>Heart Disease Expert System</h2>
 
-            <div class="form-group">
-                <label>Blood Pressure:</label>
-                <input type="number" name="blood_pressure" required>
-            </div>
+    <form action="/predict" method="post">
 
-            <div class="form-group">
-                <label>Age:</label>
-                <input type="number" name="age" required>
-            </div>
+        <!-- Basic Info -->
+        <div class="section">
+            <h3>Basic Details</h3>
+            <label>Heart Rate (bpm):</label>
+            <input type="number" name="heart_rate" required>
 
-            <div class="form-group">
-                <label>ECG:</label>
-                <select name="ecg" required>
-                    <option value="normal">Normal</option>
-                    <option value="abnormal">Abnormal</option>
-                    <option value="irregular">Irregular</option>
-                </select>
-            </div>
+            <label>Chest Pain:</label>
+            <select name="chest_pain" required>
+                <option>Absent</option>
+                <option>Mild</option>
+                <option>Moderate</option>
+                <option>Severe</option>
+            </select>
 
-            <div class="form-group">
-                <label>Cholesterol (mg/dL):</label>
-                <input type="number" name="cholesterol" required>
-            </div>
+            <label>Blood Pressure:</label>
+            <select name="blood_pressure" required>
+                <option>Low</option>
+                <option>Normal</option>
+                <option>High</option>
+                <option>Very High</option>
+            </select>
 
-            <div class="form-group">
-                <label>Blood Sugar (mg/dL):</label>
-                <input type="number" name="blood_sugar" required>
-            </div>
+            <label>Age:</label>
+            <input type="number" name="age" required>
 
-            <div class="form-group">
-                <label>Breathing:</label>
-                <select name="breathing" required>
-                    <option value="normal">Normal</option>
-                    <option value="short">Short</option>
-                </select>
-            </div>
+            <label>ECG Result:</label>
+            <select name="ecg" required>
+                <option>Normal</option>
+                <option>Abnormal</option>
+                <option>Abnormally High</option>
+            </select>
 
-            <div class="form-group">
-                <label>Fatigue Level:</label>
-                <select name="fatigue" required>
-                    <option value="low">Low</option>
-                    <option value="high">High</option>
-                </select>
-            </div>
+            <label>Cholesterol Level (mg/dL):</label>
+            <input type="number" name="cholesterol" required>
+        </div>
 
-            <div class="form-group">
-                <label>Joint Pain:</label>
-                <select name="joint_pain" required>
-                    <option value="none">None</option>
-                    <option value="present">Present</option>
-                    <option value="severe">Severe</option>
-                </select>
-            </div>
+        <!-- Breathing & Fatigue -->
+        <div class="section">
+            <h3>Breathing & Fatigue</h3>
+            <label>Breathing Condition:</label>
+            <select name="breathing" required>
+                <option>Normal</option>
+                <option>Mild</option>
+                <option>Difficult</option>
+                <option>Severe Difficulty</option>
+            </select>
 
-            <button type="submit">Check Risk</button>
-        </form>
+            <label>Fatigue Level:</label>
+            <select name="fatigue" required>
+                <option>Normal</option>
+                <option>Mild</option>
+                <option>High</option>
+                <option>Extreme</option>
+            </select>
+        </div>
 
-        {% if result %}
-            <div class="result">
-                <h2>Diagnosis: {{ result }}</h2>
-            </div>
-        {% endif %}
-    </div>
+        <!-- Joint & Heart Symptoms -->
+        <div class="section">
+            <h3>Joint & Heart Symptoms</h3>
+            <label>Joint Pain:</label>
+            <select name="joint_pain" required>
+                <option>Absent</option>
+                <option>Present</option>
+                <option>Severe</option>
+            </select>
+
+            <label>Fever / Infection History:</label>
+            <select name="fever_history" required>
+                <option>Absent</option>
+                <option>Past</option>
+                <option>Recent</option>
+            </select>
+
+            <label>Heart Murmur Presence:</label>
+            <select name="murmur" required>
+                <option>No</option>
+                <option>Yes</option>
+            </select>
+
+            <label>Ankle / Leg Swelling:</label>
+            <select name="swelling" required>
+                <option>Absent</option>
+                <option>Mild</option>
+                <option>Present</option>
+            </select>
+        </div>
+
+        <!-- Lifestyle & Medical History -->
+        <div class="section">
+            <h3>Lifestyle & Medical History</h3>
+            <label>Smoking Status:</label>
+            <select name="smoking" required>
+                <option>Non-smoker</option>
+                <option>Smoker</option>
+            </select>
+
+            <label>Diabetes Mellitus:</label>
+            <select name="diabetes" required>
+                <option>No</option>
+                <option>Yes</option>
+            </select>
+        </div>
+
+        <button type="submit">Diagnose</button>
+    </form>
+</div>
+
 </body>
 </html>
