@@ -1,0 +1,208 @@
+ 
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+        :root {
+          --primary-red: #ef4444;
+          --dark-red: #991b1b;
+          --primary-black: #111111;
+          --soft-gray: #fcfcfc;
+          --border-color: #f1f1f1;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        .app-container {
+          min-height: 100vh;
+          background-color: var(--soft-gray);
+          color: var(--primary-black);
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          padding-bottom: 80px;
+        }
+
+        nav {
+          height: 72px;
+          background: white;
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          padding: 0 5%;
+          position: sticky;
+          top: 0;
+          z-index: 100;
+        }
+
+        .nav-inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .logo {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-weight: 800;
+          font-size: 1.25rem;
+          letter-spacing: -0.5px;
+        }
+
+        .logo-box {
+          background: linear-gradient(135deg, var(--primary-red), #000);
+          color: white;
+          padding: 6px;
+          border-radius: 8px;
+          display: flex;
+        }
+
+        main {
+          max-width: 1100px;
+          margin: 40px auto;
+          padding: 0 20px;
+        }
+
+        .hero { text-align: center; margin-bottom: 50px; }
+        .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1; margin-bottom: 16px; letter-spacing: -2px; }
+        .hero p { color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto; font-weight: 500; }
+
+        .grid-layout {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+
+        @media (min-width: 900px) {
+          .grid-layout { grid-template-columns: 1fr 320px; }
+        }
+
+        .card {
+          background: white;
+          border-radius: 32px;
+          border: 1px solid var(--border-color);
+          padding: 32px;
+          box-shadow: 0 4px 30px rgba(0,0,0,0.02);
+          margin-bottom: 24px;
+        }
+
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+        .icon-circle {
+          width: 44px;
+          height: 44px;
+          background: #000;
+          color: white;
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .card-title { font-size: 1.1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Demographics row */
+        .gp-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+          background: #fdfdfd;
+          padding: 24px;
+          border-radius: 20px;
+          border: 1px solid #f0f0f0;
+          margin-bottom: 24px;
+        }
+
+        .input-group { display: flex; flex-direction: column; gap: 10px; }
+        .label { font-size: 0.75rem; font-weight: 800; color: #999; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        select {
+          width: 100%;
+          height: 52px;
+          padding: 0 16px;
+          border-radius: 14px;
+          border: 2px solid #f5f5f5;
+          background: white;
+          font-weight: 700;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        select:focus { border-color: var(--primary-red); outline: none; }
+
+        /* Toggle Buttons */
+        .toggle-container {
+          display: flex;
+          gap: 8px;
+          background: #f5f5f5;
+          padding: 5px;
+          border-radius: 14px;
+        }
+
+        .toggle-btn {
+          flex: 1;
+          height: 42px;
+          border: none;
+          background: transparent;
+          border-radius: 10px;
+          font-weight: 800;
+          font-size: 0.85rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          color: #888;
+        }
+
+        .toggle-btn.active {
+          background: white;
+          color: var(--primary-black);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .toggle-btn.active:nth-child(2) { /* Usually 'Yes' or Risk state */
+          color: var(--primary-red);
+        }
+
+        /* Submit Button */
+        .btn-submit {
+          width: 100%;
+          height: 72px;
+          background: linear-gradient(to right, #000, var(--primary-red));
+          color: white;
+          border: none;
+          border-radius: 20px;
+          font-size: 1.25rem;
+          font-weight: 800;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          margin-top: 10px;
+        }
+
+        .btn-submit:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(239, 68, 68, 0.3); }
+
+        /* Sidebar Summary */
+        .sidebar-card { background: #111; color: white; padding: 28px; border-radius: 32px; position: sticky; top: 100px; }
+        .summary-item {
+          display: flex;
+          justify-content: space-between;
+          padding: 12px 0;
+          border-bottom: 1px solid #222;
+          font-size: 0.8rem;
+        }
+        .summary-label { color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .summary-value { color: white; font-weight: 800; }
+        .summary-value.risk { color: var(--primary-red); }
+
+        /* Results Display */
+        .report-card { padding: 50px; border-radius: 40px; text-align: center; }
+        .risk-high { background: #000; color: white; }
+        .risk-mod { background: white; border: 4px solid var(--primary-red); }
+        .risk-low { background: white; border: 1px solid var(--border-color); }
+        .diag-text { font-size: 5rem; font-weight: 800; letter-spacing: -3px; margin: 10px 0; }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .spin { animation: spin 1s linear infinite; }
+    

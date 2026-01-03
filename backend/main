@@ -1,0 +1,191 @@
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from typing import Dict, List, Tuple
+import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ---------------------------------------------------------
+# 1. KNOWLEDGE BASE DEFINITIONS
+# ---------------------------------------------------------
+# The order of these keys and the items in the lists determines the Rule ID.
+# Total combinations = 3 * 4 * 3 * 2 * 2 * 2 * 2 * 2 * 2 * 2 * 2 * 2 = 18,432
+VARIABLES = {
+    "age_group": ["Elderly", "Middle-Aged Adult", "Young Adult"],
+    "chest_pain": ["Severe", "Moderate", "Mild", "None"],
+    "blood_pressure": ["High", "Elevated", "Normal"],
+    "gender": ["Male", "Female"],
+    "short_breath": ["Yes", "No"],
+    "fatigue": ["Yes", "No"],
+    "dizziness": ["Yes", "No"],
+    "cold_sweat": ["Yes", "No"],
+    "smoker": ["Smoker", "Non-Smoker"],
+    "diabetes": ["Yes", "No"],
+    "family_history": ["Yes", "No"],
+    "inactive": ["Physically Inactive", "Active"]
+}
+
+RISK_CATEGORIES = {
+    "age_group": {"Elderly": "high", "Middle-Aged Adult": "medium", "Young Adult": "low"},
+    "chest_pain": {"Severe": "high", "Moderate": "medium", "Mild": "medium", "None": "low"},
+    "short_breath": {"Yes": "high", "No": "low"},
+    "fatigue": {"Yes": "medium", "No": "low"},
+    "dizziness": {"Yes": "medium", "No": "low"},
+    "cold_sweat": {"Yes": "high", "No": "low"},
+    "smoker": {"Smoker": "high", "Non-Smoker": "low"},
+    "diabetes": {"Yes": "high", "No": "low"},
+    "blood_pressure": {"High": "high", "Elevated": "medium", "Normal": "low"},
+    "family_history": {"Yes": "high", "No": "low"},
+    "inactive": {"Physically Inactive": "medium", "Active": "low"},
+}
+
+# ---------------------------------------------------------
+# 2. RULE UTILITIES
+# ---------------------------------------------------------
+def calculate_rule_id(inputs: Dict[str, str]) -> int:
+    """
+    Calculates a unique numeric ID for the combination.
+    Logic: (Index_Var1 * Multiplier) + (Index_Var2 * Multiplier) ...
+    """
+    index = 0
+    multiplier = 1
+    # Iterate through variables in reverse to create a unique positional number
+    for var in reversed(list(VARIABLES.keys())):
+        options = VARIABLES[var]
+        val = inputs.get(var)
+        
+        # Find index of the current input value in the allowed options
+        if val in options:
+            val_idx = options.index(val)
+            index += val_idx * multiplier
+        
+        # Update multiplier based on the number of options for this variable
+        multiplier *= len(options)
+    
+    # Return 1-based index
+    final_id = index + 1
+    return final_id
+
+# ---------------------------------------------------------
+# 3. EXPERT ENGINE
+# ---------------------------------------------------------
+class HeartExpertEngine:
+    @staticmethod
+    def evaluate(inputs: Dict[str, str]):
+        active_factors = []
+        risk_terms = []
+        
+        # Determine the categorical risk for each input
+        for key, value in inputs.items():
+            if key in RISK_CATEGORIES:
+                category = RISK_CATEGORIES[key].get(value, "low")
+                risk_terms.append(category)
+                # We only list factors in the 'IF' statement if they aren't 'low' risk
+                if category != "low":
+                    active_factors.append(f"{key.replace('_', ' ')} is {value}")
+
+        high_count = risk_terms.count("high")
+        medium_count = risk_terms.count("medium")
+        
+        # Threshold Reasoning
+        if high_count >= 4:
+            status = "High Risk"
+            reason = "High count of major risk factors"
+        elif (inputs.get("diabetes") == "Yes" and inputs.get("short_breath") == "Yes" and inputs.get("cold_sweat") == "Yes"):
+            status = "High Risk"
+            reason = "Specific Atypical/Silent MI combination"
+        elif high_count >= 1:
+            status = "Moderate Risk"
+            reason = "Significant risk factor detected"
+        elif medium_count >= 3:
+            status = "Moderate Risk"
+            reason = "Multiple moderate symptoms detected"
+        else:
+            status = "Low Risk"
+            reason = "No high-risk thresholds exceeded"
+
+        # Build the 'IF... THEN...' string
+        antecedents = " AND ".join(active_factors) if active_factors else "all factors are Normal"
+        implication = f"Rule {calculate_rule_id(inputs)}: IF {antecedents} THEN result is {status} ({reason})"
+
+        return {
+            "status": status,
+            "rule_id": calculate_rule_id(inputs),
+            "implication": implication,
+            "metrics": {"high": high_count, "medium": medium_count}
+        }
+
+# ---------------------------------------------------------
+# 4. API SETUP
+# ---------------------------------------------------------
+class UserProfile(BaseModel):
+    age_group: str
+    gender: str
+    chest_pain: str
+    short_breath: str
+    fatigue: str
+    dizziness: str
+    cold_sweat: str
+    smoker: str
+    diabetes: str
+    blood_pressure: str
+    family_history: str
+    inactive: str
+
+@app.post("/api/diagnose")
+async def diagnose_heart(profile: UserProfile):
+    user_data = profile.dict()
+    result = HeartExpertEngine.evaluate(user_data)
+    
+    # Log to terminal for debugging
+    print(f"Processed Request -> Rule ID: {result['rule_id']} | Status: {result['status']}")
+
+    return {
+        "title": "Heart Attack Risk Assessment Result",
+    "diagnosis": result["status"],
+    "summary_message": (
+        "Immediate clinical attention required." if result["status"] == "High Risk"
+        else "Follow-up recommended." if result["status"] == "Moderate Risk"
+        else "Current indicators are healthy."
+    ),
+    "triggered_rule": {
+        "id": f"RULE_{result['rule_id']}",
+        "full_logic": result["implication"]
+    },
+    "input_summary": user_data,
+    "recommendations": (
+        [
+            "Contact your cardiologist immediately.",
+            "Avoid strenuous activities.",
+            "Maintain a strict heart-healthy diet.",
+            "Monitor symptoms and keep emergency contacts ready."
+        ] if result["status"] == "High Risk"
+        else [
+            "Schedule a medical checkup.",
+            "Improve lifestyle habits: diet, exercise, reduce stress.",
+            "Monitor blood pressure and heart symptoms regularly."
+        ] if result["status"] == "Moderate Risk"
+        else [
+            "Maintain regular exercise and a balanced diet.",
+            "Continue routine health checkups.",
+            "Stay active and avoid unhealthy habits."
+        ]
+    ),
+    "educational_tips": ["Maintain a heart-healthy diet", "Engage in regular exercise"],
+    "expert_system_metadata": {
+        "total_theoretical_rules": 18432,
+        "triggered_high_factors": result["metrics"]["high"],
+        "triggered_medium_factors": result["metrics"]["medium"]
+    }
+    }
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
