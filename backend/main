@@ -150,20 +150,41 @@ async def diagnose_heart(profile: UserProfile):
 
     return {
         "title": "Heart Attack Risk Assessment Result",
-        "diagnosis": result["status"],
-        "summary_message": "Immediate clinical attention required." if result["status"] == "High Risk" else "Follow-up recommended." if result["status"] == "Moderate Risk" else "Current indicators are healthy.",
-        "triggered_rule": {
-            "id": f"RULE_{result['rule_id']}",
-            "full_logic": result["implication"]
-        },
-        "input_summary": user_data,
-        "recommendations": ["Urgent: Consult a specialist"] if result["status"] == "High Risk" else ["Schedule a check-up"] if result["status"] == "Moderate Risk" else ["Maintain current habits"],
-        "educational_tips": ["Maintain a heart-healthy diet", "Engage in regular exercise"],
-        "expert_system_metadata": {
-            "total_theoretical_rules": 18432,
-            "triggered_high_factors": result["metrics"]["high"],
-            "triggered_medium_factors": result["metrics"]["medium"]
-        }
+    "diagnosis": result["status"],
+    "summary_message": (
+        "Immediate clinical attention required." if result["status"] == "High Risk"
+        else "Follow-up recommended." if result["status"] == "Moderate Risk"
+        else "Current indicators are healthy."
+    ),
+    "triggered_rule": {
+        "id": f"RULE_{result['rule_id']}",
+        "full_logic": result["implication"]
+    },
+    "input_summary": user_data,
+    "recommendations": (
+        [
+            "Contact your cardiologist immediately.",
+            "Avoid strenuous activities.",
+            "Maintain a strict heart-healthy diet.",
+            "Monitor symptoms and keep emergency contacts ready."
+        ] if result["status"] == "High Risk"
+        else [
+            "Schedule a medical checkup.",
+            "Improve lifestyle habits: diet, exercise, reduce stress.",
+            "Monitor blood pressure and heart symptoms regularly."
+        ] if result["status"] == "Moderate Risk"
+        else [
+            "Maintain regular exercise and a balanced diet.",
+            "Continue routine health checkups.",
+            "Stay active and avoid unhealthy habits."
+        ]
+    ),
+    "educational_tips": ["Maintain a heart-healthy diet", "Engage in regular exercise"],
+    "expert_system_metadata": {
+        "total_theoretical_rules": 18432,
+        "triggered_high_factors": result["metrics"]["high"],
+        "triggered_medium_factors": result["metrics"]["medium"]
+    }
     }
 
 if __name__ == "__main__":
